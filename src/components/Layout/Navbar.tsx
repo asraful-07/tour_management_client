@@ -21,27 +21,12 @@ import {
   NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuLink,
+  NavigationMenuTrigger,
+  NavigationMenuContent,
 } from "@/components/ui/navigation-menu";
-import Logo from "../../../public/icons/Logo";
+import Image from "next/image";
 
-const navigationLinks = [
-  { href: "/", label: "Home", role: "PUBLIC" },
-  { href: "/about", label: "About", role: "PUBLIC" },
-  { href: "/blog", label: "Blog", role: "PUBLIC" },
-  { href: "/tours", label: "Tours", role: "PUBLIC" },
-  { href: "/admin/dashboard", label: "Dashboard", role: UserRole.admin },
-  { href: "/guide/dashboard", label: "Dashboard", role: UserRole.guide },
-  { href: "/dashboard/booking", label: "Dashboard", role: UserRole.user },
-];
-
-const getDashboardHref = (userRole?: string) => {
-  if (userRole === UserRole.admin) return "/admin/dashboard";
-  if (userRole === UserRole.guide) return "/guide/dashboard";
-  if (userRole === UserRole.user) return "/dashboard/booking";
-  return "/";
-};
-
-// Small helper component for dropdown rows
+// Dropdown item component for auth dropdown
 function DropdownItem({
   to,
   label,
@@ -55,23 +40,44 @@ function DropdownItem({
     <Link
       href={to}
       onClick={onClick}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 9,
-        padding: "8px 10px",
-        borderRadius: 8,
-        fontSize: 13,
-        fontWeight: 500,
-        color: "#333",
-        fontFamily: "'DM Sans', sans-serif",
-        textDecoration: "none",
-      }}
+      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200 w-full"
     >
       {label}
     </Link>
   );
 }
+
+// Navigation items for Tours dropdown
+const tourItems = [
+  { label: "All Tours", href: "/tours" },
+  { label: "Tour Packages", href: "/tours/packages" },
+  { label: "Tour Details", href: "/tours/details" },
+  { label: "Recently Viewed", href: "/recently-viewed" },
+  { label: "Booking Confirmation", href: "/booking/confirmation" },
+];
+
+// Navigation items for Pages dropdown
+const pageItems = [
+  { label: "Gallery", href: "/gallery" },
+  { label: "Pricing Plans", href: "/pricing" },
+  { label: "Our Team", href: "/team" },
+  { label: "FAQs", href: "/faqs" },
+  { label: "Our Services", href: "/services" },
+  { label: "Hotels", href: "/hotels" },
+  { label: "Destinations", href: "/destinations" },
+  { label: "Destination Details", href: "/destinations/details" },
+  { label: "Testimonials", href: "/testimonials" },
+  { label: "Blog List", href: "/blog" },
+  { label: "Terms & Conditions", href: "/terms" },
+  { label: "Privacy Policy", href: "/privacy" },
+];
+
+const getDashboardHref = (userRole?: string) => {
+  if (userRole === UserRole.admin) return "/admin/dashboard";
+  if (userRole === UserRole.guide) return "/guide/dashboard";
+  if (userRole === UserRole.user) return "/dashboard/booking";
+  return "/";
+};
 
 export default function Navbar() {
   const { data: rawUser } = useUserInfoQuery(undefined);
@@ -118,17 +124,108 @@ export default function Navbar() {
   };
 
   return (
-    <header className="border-b">
-      <div className="container mx-auto px-4 flex h-16 items-center justify-between gap-4">
-        {/* Left side */}
-        <div className="flex items-center gap-2">
+    <header className="fixed top-0 left-0 z-50 w-full border-b border-gray-200/50 bg-white/70 backdrop-blur-lg dark:bg-gray-900/70">
+      <div className="container mx-auto px-4 flex h-20 items-center justify-between">
+        {/* Left - Logo */}
+        <div className="flex items-center flex-shrink-0">
+          <Link href="/">
+            <Image
+              src="https://dreamstour.dreamstechnologies.com/html/assets/img/logo-dark.svg"
+              alt="Logo"
+              width={140}
+              height={40}
+              className="h-12 w-44"
+              priority
+            />
+          </Link>
+        </div>
+
+        {/* Center - Navigation Menu with Tours and Pages only */}
+        <div className="hidden md:flex items-center justify-center flex-1">
+          <NavigationMenu>
+            <NavigationMenuList className="flex items-center gap-6">
+              {/* Home link */}
+              <NavigationMenuItem>
+                <Link
+                  href="/"
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors duration-200"
+                >
+                  Home
+                </Link>
+              </NavigationMenuItem>
+
+              {/* About link */}
+              <NavigationMenuItem>
+                <Link
+                  href="/about"
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors duration-200"
+                >
+                  About
+                </Link>
+              </NavigationMenuItem>
+
+              {/* Tours Dropdown */}
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="text-sm font-medium text-gray-700 hover:text-gray-900 data-[state=open]:text-gray-900 transition-colors duration-200">
+                  Tours
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="w-56 p-2 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-100">
+                    {tourItems.map((item) => (
+                      <NavigationMenuLink
+                        key={item.label}
+                        href={item.href}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200"
+                      >
+                        {item.label}
+                      </NavigationMenuLink>
+                    ))}
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              {/* Pages Dropdown */}
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="text-sm font-medium text-gray-700 hover:text-gray-900 data-[state=open]:text-gray-900 transition-colors duration-200">
+                  Pages
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="w-64 p-2 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-100 max-h-96 overflow-y-auto">
+                    {pageItems.map((item) => (
+                      <NavigationMenuLink
+                        key={item.label}
+                        href={item.href}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200"
+                      >
+                        {item.label}
+                      </NavigationMenuLink>
+                    ))}
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              {/* Contact link */}
+              <NavigationMenuItem>
+                <Link
+                  href="/contact"
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors duration-200"
+                >
+                  Contact
+                </Link>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+
+        {/* Right - Auth/Profile */}
+        <div className="flex items-center gap-2 flex-shrink-0">
           {/* Mobile menu trigger */}
           <Popover open={mobileOpen} onOpenChange={setMobileOpen}>
-            <PopoverTrigger className="group inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground transition hover:bg-muted md:hidden">
+            <PopoverTrigger className="group inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200/50 bg-white/50 text-gray-600 transition hover:bg-gray-50 hover:border-gray-300 md:hidden backdrop-blur-sm">
               <svg
                 className="pointer-events-none"
-                width={16}
-                height={16}
+                width={18}
+                height={18}
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -151,121 +248,78 @@ export default function Navbar() {
                 />
               </svg>
             </PopoverTrigger>
-            <PopoverContent align="start" className="w-36 p-1 md:hidden">
-              <NavigationMenu className="max-w-none *:w-full">
-                <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
-                  {navigationLinks
-                    .filter(
-                      (link) =>
-                        link.role === "PUBLIC" || link.role === currentRole,
-                    )
-                    .map((link) => (
-                      <NavigationMenuItem key={link.href} className="w-full">
-                        <NavigationMenuLink
-                          href={link.href}
-                          closeOnClick
-                          className="py-1.5"
-                        >
-                          {link.label}
-                        </NavigationMenuLink>
-                      </NavigationMenuItem>
-                    ))}
-                </NavigationMenuList>
-              </NavigationMenu>
+            <PopoverContent
+              align="end"
+              className="w-64 p-2 md:hidden bg-white/95 backdrop-blur-sm border-gray-200/50"
+            >
+              <div className="flex flex-col space-y-1">
+                <Link
+                  href="/"
+                  onClick={() => setMobileOpen(false)}
+                  className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200"
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/about"
+                  onClick={() => setMobileOpen(false)}
+                  className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200"
+                >
+                  About
+                </Link>
+                <div className="px-3 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Tours
+                </div>
+                {tourItems.map((item) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="px-6 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                <div className="px-3 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Pages
+                </div>
+                {pageItems.map((item) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="px-6 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                <Link
+                  href="/contact"
+                  onClick={() => setMobileOpen(false)}
+                  className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200"
+                >
+                  Contact
+                </Link>
+              </div>
             </PopoverContent>
           </Popover>
 
-          {/* Main nav */}
-          <div className="flex items-center gap-6">
-            <Link href="/" className="text-primary hover:text-primary/90">
-              <Logo />
-            </Link>
-
-            {/* Navigation menu */}
-            <NavigationMenu className="max-md:hidden">
-              <NavigationMenuList className="gap-2">
-                {navigationLinks
-                  .filter(
-                    (link) =>
-                      link.role === "PUBLIC" || link.role === currentRole,
-                  )
-                  .map((link) => (
-                    <NavigationMenuItem key={link.href}>
-                      <NavigationMenuLink
-                        href={link.href}
-                        className="text-muted-foreground hover:text-primary py-1.5 font-medium"
-                      >
-                        {link.label}
-                      </NavigationMenuLink>
-                    </NavigationMenuItem>
-                  ))}
-              </NavigationMenuList>
-            </NavigationMenu>
-          </div>
-        </div>
-
-        {/* Right side */}
-        <div className="flex items-center gap-2">
-          {/* <ModeToggle /> */}
-
           {/* Profile / Auth dropdown */}
-          <div ref={dropdownRef} style={{ position: "relative" }}>
+          <div ref={dropdownRef} className="relative">
             <button
               onClick={() => setDropdownOpen((o) => !o)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 7,
-                padding: "4px 10px 4px 4px",
-                background: dropdownOpen ? "#F7F4F0" : "transparent",
-                border: "0.5px solid #E8E6DF",
-                borderRadius: 40,
-                cursor: "pointer",
-                transition: "all 0.15s",
-              }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLButtonElement).style.background =
-                  "#F7F4F0")
-              }
-              onMouseLeave={(e) => {
-                if (!dropdownOpen)
-                  (e.currentTarget as HTMLButtonElement).style.background =
-                    "transparent";
-              }}
+              className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-50/80 transition-colors duration-200 border border-gray-200/50 backdrop-blur-sm bg-white/30"
             >
               {/* Avatar */}
-              <div
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: "50%",
-                  overflow: "hidden",
-                  background: avatarSrc ? "transparent" : "#FAECE7",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                }}
-              >
+              <div className="w-8 h-8 rounded-full overflow-hidden bg-orange-100 flex items-center justify-center flex-shrink-0">
                 {avatarSrc ? (
                   <img
                     src={avatarSrc}
                     alt="Profile"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
+                    className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span
-                    style={{
-                      fontFamily: "'Fraunces', serif",
-                      fontSize: 12,
-                      fontWeight: 600,
-                      color: "#C84B31",
-                    }}
-                  >
+                  <span className="text-sm font-semibold text-orange-600">
                     {user ? initials : "?"}
                   </span>
                 )}
@@ -273,33 +327,20 @@ export default function Navbar() {
 
               {/* Name (desktop only) */}
               {user && (
-                <span
-                  style={{
-                    fontSize: 13,
-                    fontWeight: 500,
-                    color: "#333",
-                    maxWidth: 90,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                  className="max-sm:hidden"
-                >
+                <span className="text-sm font-medium text-gray-700 max-sm:hidden">
                   {displayName}
                 </span>
               )}
 
               {/* Chevron */}
               <svg
-                width="12"
-                height="12"
+                width="14"
+                height="14"
                 viewBox="0 0 12 12"
                 fill="none"
-                style={{
-                  color: "#AAA",
-                  transition: "transform 0.2s",
-                  transform: dropdownOpen ? "rotate(180deg)" : "rotate(0deg)",
-                }}
+                className={`text-gray-400 transition-transform duration-200 ${
+                  dropdownOpen ? "rotate-180" : ""
+                }`}
               >
                 <path
                   d="M2 4l4 4 4-4"
@@ -313,47 +354,21 @@ export default function Navbar() {
 
             {/* Dropdown menu */}
             {dropdownOpen && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "calc(100% + 8px)",
-                  right: 0,
-                  background: "#fff",
-                  border: "0.5px solid #E8E6DF",
-                  borderRadius: 14,
-                  boxShadow: "0 8px 32px rgba(0,0,0,0.10)",
-                  minWidth: 200,
-                  overflow: "hidden",
-                  zIndex: 50,
-                }}
-              >
+              <div className="absolute top-full right-0 mt-2 w-56 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-100/50 py-2 z-50">
                 {user ? (
                   <>
                     {/* User info header */}
-                    <div
-                      style={{
-                        padding: "12px 14px 10px",
-                        borderBottom: "0.5px solid #F0EDE6",
-                      }}
-                    >
-                      <div
-                        style={{
-                          fontFamily: "'Fraunces', serif",
-                          fontSize: 14,
-                          fontWeight: 500,
-                          color: "#1A1A1A",
-                          marginBottom: 2,
-                        }}
-                      >
+                    <div className="px-4 py-3 border-b border-gray-100/50">
+                      <div className="font-semibold text-gray-900">
                         {displayName}
                       </div>
-                      <div style={{ fontSize: 11, color: "#AAA" }}>
+                      <div className="text-sm text-gray-500 truncate">
                         {user?.email}
                       </div>
                     </div>
 
                     {/* Menu items */}
-                    <div style={{ padding: "6px" }}>
+                    <div className="py-1">
                       <DropdownItem
                         to={getDashboardHref(currentRole)}
                         label="Dashboard"
@@ -365,56 +380,39 @@ export default function Navbar() {
                         onClick={() => setDropdownOpen(false)}
                       />
                       <DropdownItem
-                        to={`${getDashboardHref(currentRole)}/orders`}
-                        label="My Orders"
+                        to={`${getDashboardHref(currentRole)}`}
+                        label="My Bookings"
                         onClick={() => setDropdownOpen(false)}
                       />
                     </div>
 
                     {/* Logout */}
-                    <div
-                      style={{
-                        padding: "6px",
-                        borderTop: "0.5px solid #F0EDE6",
-                      }}
-                    >
+                    <div className="border-t border-gray-100/50 pt-1">
                       <button
                         onClick={handleLogout}
-                        style={{
-                          width: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 9,
-                          padding: "8px 10px",
-                          borderRadius: 8,
-                          background: "transparent",
-                          border: "none",
-                          cursor: "pointer",
-                          fontSize: 13,
-                          fontWeight: 500,
-                          color: "#C0392B",
-                          fontFamily: "'DM Sans', sans-serif",
-                          transition: "background 0.12s",
-                          textAlign: "left",
-                        }}
-                        onMouseEnter={(e) =>
-                          ((
-                            e.currentTarget as HTMLButtonElement
-                          ).style.background = "#FEE2E2")
-                        }
-                        onMouseLeave={(e) =>
-                          ((
-                            e.currentTarget as HTMLButtonElement
-                          ).style.background = "transparent")
-                        }
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors duration-200"
                       >
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                          <polyline points="16 17 21 12 16 7" />
+                          <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
                         Logout
                       </button>
                     </div>
                   </>
                 ) : (
                   /* Not logged in */
-                  <div style={{ padding: "6px" }}>
+                  <div className="py-1">
                     <DropdownItem
                       to="/login"
                       label="Login"

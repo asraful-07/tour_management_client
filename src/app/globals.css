@@ -46,6 +46,16 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Tomato Color Palette */
+  --tomato-bright: #ff4500; /* Bright tomato */
+  --tomato-orange: #ff6347; /* Tomato orange */
+  --tomato-red: #dc143c; /* Crimson red */
+  --tomato-warm: #ff6b35; /* Warm tomato */
+  --tomato-dark: #c0392b; /* Dark tomato */
+  --tomato-light: #ff8c42; /* Light tomato */
+  --accent-gold: #ffd700; /* Gold accent */
+  --accent-yellow: #ffe66d; /* Soft yellow accent */
 }
 
 :root {
@@ -126,6 +136,21 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.animate-gradient {
+  animation: gradient 3s ease infinite;
 }
 
 .animate-fadeIn {

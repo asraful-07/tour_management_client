@@ -40,7 +40,7 @@ function DropdownItem({
     <Link
       href={to}
       onClick={onClick}
-      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200 w-full"
+      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200 w-full whitespace-nowrap"
     >
       {label}
     </Link>
@@ -124,8 +124,8 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 z-50 w-full border-b border-gray-200/50 bg-white/70 backdrop-blur-lg dark:bg-gray-900/70">
-      <div className="container mx-auto px-4 flex h-20 items-center justify-between">
+    <header className="fixed top-0 left-0 z-50 w-full border border-white/20 bg-white/10 backdrop-blur-md text-white">
+      <div className="container mx-auto px-4 flex h-20 items-center justify-between gap-4 min-w-0">
         {/* Left - Logo */}
         <div className="flex items-center flex-shrink-0">
           <Link href="/">
@@ -134,21 +134,21 @@ export default function Navbar() {
               alt="Logo"
               width={140}
               height={40}
-              className="h-12 w-44"
+              className="h-12 w-auto max-w-[180px]"
               priority
             />
           </Link>
         </div>
 
         {/* Center - Navigation Menu with Tours and Pages only */}
-        <div className="hidden md:flex items-center justify-center flex-1">
+        <div className="hidden md:flex items-center justify-center flex-1 min-w-0 px-4">
           <NavigationMenu>
-            <NavigationMenuList className="flex items-center gap-6">
+            <NavigationMenuList className="flex items-center gap-4 lg:gap-6">
               {/* Home link */}
               <NavigationMenuItem>
                 <Link
                   href="/"
-                  className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors duration-200"
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors duration-200 whitespace-nowrap"
                 >
                   Home
                 </Link>
@@ -158,7 +158,7 @@ export default function Navbar() {
               <NavigationMenuItem>
                 <Link
                   href="/about"
-                  className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors duration-200"
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors duration-200 whitespace-nowrap"
                 >
                   About
                 </Link>
@@ -166,7 +166,7 @@ export default function Navbar() {
 
               {/* Tours Dropdown */}
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-sm font-medium text-gray-700 hover:text-gray-900 data-[state=open]:text-gray-900 transition-colors duration-200">
+                <NavigationMenuTrigger className="text-sm font-medium text-gray-700 hover:text-gray-900 data-[state=open]:text-gray-900 transition-colors duration-200 whitespace-nowrap">
                   Tours
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -175,7 +175,7 @@ export default function Navbar() {
                       <NavigationMenuLink
                         key={item.label}
                         href={item.href}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200 whitespace-nowrap"
                       >
                         {item.label}
                       </NavigationMenuLink>
@@ -186,7 +186,7 @@ export default function Navbar() {
 
               {/* Pages Dropdown */}
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-sm font-medium text-gray-700 hover:text-gray-900 data-[state=open]:text-gray-900 transition-colors duration-200">
+                <NavigationMenuTrigger className="text-sm font-medium text-gray-700 hover:text-gray-900 data-[state=open]:text-gray-900 transition-colors duration-200 whitespace-nowrap">
                   Pages
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -195,7 +195,7 @@ export default function Navbar() {
                       <NavigationMenuLink
                         key={item.label}
                         href={item.href}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200 whitespace-nowrap"
                       >
                         {item.label}
                       </NavigationMenuLink>
@@ -208,7 +208,7 @@ export default function Navbar() {
               <NavigationMenuItem>
                 <Link
                   href="/contact"
-                  className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors duration-200"
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors duration-200 whitespace-nowrap"
                 >
                   Contact
                 </Link>
@@ -256,14 +256,14 @@ export default function Navbar() {
                 <Link
                   href="/"
                   onClick={() => setMobileOpen(false)}
-                  className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200"
+                  className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200 whitespace-nowrap"
                 >
                   Home
                 </Link>
                 <Link
                   href="/about"
                   onClick={() => setMobileOpen(false)}
-                  className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200"
+                  className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200 whitespace-nowrap"
                 >
                   About
                 </Link>
@@ -275,7 +275,7 @@ export default function Navbar() {
                     key={item.label}
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
-                    className="px-6 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200"
+                    className="px-6 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200 whitespace-nowrap"
                   >
                     {item.label}
                   </Link>
@@ -288,7 +288,7 @@ export default function Navbar() {
                     key={item.label}
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
-                    className="px-6 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200"
+                    className="px-6 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200 whitespace-nowrap"
                   >
                     {item.label}
                   </Link>
@@ -296,7 +296,7 @@ export default function Navbar() {
                 <Link
                   href="/contact"
                   onClick={() => setMobileOpen(false)}
-                  className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200"
+                  className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors duration-200 whitespace-nowrap"
                 >
                   Contact
                 </Link>
@@ -308,7 +308,7 @@ export default function Navbar() {
           <div ref={dropdownRef} className="relative">
             <button
               onClick={() => setDropdownOpen((o) => !o)}
-              className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-50/80 transition-colors duration-200 border border-gray-200/50 backdrop-blur-sm bg-white/30"
+              className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-50/80 transition-colors duration-200 border border-gray-200/50 backdrop-blur-sm bg-white/30 max-w-[200px]"
             >
               {/* Avatar */}
               <div className="w-8 h-8 rounded-full overflow-hidden bg-orange-100 flex items-center justify-center flex-shrink-0">
@@ -325,20 +325,20 @@ export default function Navbar() {
                 )}
               </div>
 
-              {/* Name (desktop only) */}
+              {/* Name (desktop only) - with truncation for long names */}
               {user && (
-                <span className="text-sm font-medium text-gray-700 max-sm:hidden">
+                <span className="text-sm font-medium text-gray-700 hidden sm:inline-block truncate max-w-[120px]">
                   {displayName}
                 </span>
               )}
 
-              {/* Chevron */}
+              {/* Chevron - reduced size */}
               <svg
-                width="14"
-                height="14"
+                width="12"
+                height="12"
                 viewBox="0 0 12 12"
                 fill="none"
-                className={`text-gray-400 transition-transform duration-200 ${
+                className={`text-gray-400 transition-transform duration-200 flex-shrink-0 ${
                   dropdownOpen ? "rotate-180" : ""
                 }`}
               >
@@ -359,7 +359,7 @@ export default function Navbar() {
                   <>
                     {/* User info header */}
                     <div className="px-4 py-3 border-b border-gray-100/50">
-                      <div className="font-semibold text-gray-900">
+                      <div className="font-semibold text-gray-900 truncate">
                         {displayName}
                       </div>
                       <div className="text-sm text-gray-500 truncate">
@@ -390,7 +390,7 @@ export default function Navbar() {
                     <div className="border-t border-gray-100/50 pt-1">
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors duration-200"
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors duration-200 whitespace-nowrap"
                       >
                         <svg
                           width="16"
@@ -401,6 +401,7 @@ export default function Navbar() {
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
+                          className="flex-shrink-0"
                         >
                           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                           <polyline points="16 17 21 12 16 7" />

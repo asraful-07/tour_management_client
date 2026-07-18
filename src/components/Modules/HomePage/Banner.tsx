@@ -16,7 +16,7 @@ const slides = [
   {
     id: 2,
     image: "/images/bg1.png",
-    title: "Discover Extraordinary Destinations:",
+    title: "Discover Extraordinary:",
     subtitle: "Adventure Awaits You!",
     description:
       "From pristine beaches to majestic mountains, we curate journeys that inspire and transform. Your dream vacation is just a click away.",

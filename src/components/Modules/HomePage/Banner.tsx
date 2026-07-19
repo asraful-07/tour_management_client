@@ -11,7 +11,7 @@ const slides = [
     title: "Your Next Great Journey Starts Here:",
     subtitle: "Explore the World with Us!",
     description:
-      "Get ready to embark on the Our travel agency is dedicated to crafting unforgettable experiences that will leave you with lifelong memories.",
+      "Get ready to embark on the Our travel agency is dedicated to crafting unforgettable experiences that will leave you with lifelong memories.The world is full of wonders, and we're here to help you discover them. From exotic destinations to hidden gems, we curate journeys that cater to your unique travel style.",
   },
   {
     id: 2,
@@ -19,7 +19,7 @@ const slides = [
     title: "Discover Extraordinary:",
     subtitle: "Adventure Awaits You!",
     description:
-      "From pristine beaches to majestic mountains, we curate journeys that inspire and transform. Your dream vacation is just a click away.",
+      "From pristine beaches to majestic mountains, we curate journeys that inspire and transform. Your dream vacation is just a click away.Tour with us and experience the world like never before. Our expert guides and carefully crafted itineraries ensure that every moment of your trip is filled with excitement, discovery, and joy.",
   },
   {
     id: 3,
@@ -27,7 +27,7 @@ const slides = [
     title: "Create Lifelong Memories:",
     subtitle: "Travel with Passion!",
     description:
-      "Experience the world through our expertly crafted tours. Every journey is designed to immerse you in culture, nature, and adventure.",
+      "Experience the world through our expertly crafted tours. Every journey is designed to immerse you in culture, nature, and adventure.Tours travel with us and create memories that will last a lifetime. Our team of travel experts is dedicated to providing you with exceptional service, ensuring that your trip is seamless, enjoyable, and unforgettable.",
   },
 ];
 
@@ -126,21 +126,6 @@ export default function Banner() {
                     <p className="text-base md:text-lg lg:text-xl leading-relaxed text-gray-200">
                       {slide.description}
                     </p>
-                    <div className="mt-6 flex items-center gap-4">
-                      <div className="flex -space-x-2">
-                        {[1, 2, 3, 4].map((i) => (
-                          <div
-                            key={i}
-                            className="w-10 h-10 rounded-full border-2 border-white bg-gray-300 flex items-center justify-center text-xs font-semibold text-gray-700"
-                          >
-                            {String.fromCharCode(64 + i)}
-                          </div>
-                        ))}
-                      </div>
-                      <span className="text-sm text-gray-300">
-                        +12k travelers trusted us
-                      </span>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -148,22 +133,6 @@ export default function Banner() {
           </div>
         </div>
       ))}
-
-      {/* Dots indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentSlide
-                ? "bg-orange-500 w-8"
-                : "bg-white/50 hover:bg-white/80"
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
     </div>
   );
 }

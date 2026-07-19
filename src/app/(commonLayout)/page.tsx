@@ -1,22 +1,25 @@
 import Banner from "@/components/Modules/HomePage/Banner";
 import BannerText from "@/components/Modules/HomePage/BannerText";
+import Contact from "@/components/Modules/HomePage/Contact";
 import FeedBack from "@/components/Modules/HomePage/FeedBack";
-
-import { Button } from "@/components/ui/button";
+import Gallery from "@/components/Modules/HomePage/Gallery";
+import StatCard from "@/components/Modules/HomePage/StatCard";
+import Team from "@/components/Modules/HomePage/Team";
+import Logo from "@/components/Modules/HomePage/Logo";
+import Destinations from "@/components/Modules/HomePage/Destinations";
 
 export default function HomePage() {
   return (
     <div className="mt-20">
       <Banner />
-
       <BannerText />
+      <Contact />
       <FeedBack />
-      <div className="container mx-auto px-4 py-12">
-        <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Click me
-        </Button>
-        <h1>HomePage home</h1>
-      </div>
+      <Gallery />
+      <StatCard />
+      <Team />
+      <Destinations />
+      <Logo />
     </div>
   );
 }

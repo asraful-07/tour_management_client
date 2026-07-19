@@ -130,11 +130,11 @@ export default function Navbar() {
         <div className="flex items-center flex-shrink-0">
           <Link href="/">
             <Image
-              src="https://dreamstour.dreamstechnologies.com/html/assets/img/logo-dark.svg"
+              src="https://togo.uxper.co/wp-content/uploads/2025/06/color.svg"
               alt="Logo"
-              width={140}
+              width={100}
               height={40}
-              className="h-12 w-auto max-w-[180px]"
+              className="h-12 w-32 max-w-[180px]"
               priority
             />
           </Link>

@@ -8,16 +8,11 @@ export default function FeedBack() {
     <section className="py-20 overflow-hidden">
       <div className="container mx-auto px-4">
         {/* Heading */}
-        <div className="mb-12 text-center">
+        <div className="mb-12 text-left">
           <p className="text-lg font-semibold text-[#FF4500]">Testimonials</p>
           <h2 className="mt-2 text-4xl md:text-5xl font-bold text-gray-900">
             What Our Travelers Say
           </h2>
-          <div className="w-20 h-1 bg-[#FF4500] mx-auto rounded-full mt-4 mb-4"></div>
-          <p className="mx-auto mt-4 max-w-2xl text-gray-600">
-            Discover why thousands of travelers trust us for unforgettable
-            experiences across Bangladesh.
-          </p>
         </div>
 
         {/* 3 Columns - Vertical Scrolling */}

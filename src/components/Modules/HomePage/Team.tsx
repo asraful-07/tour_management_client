@@ -69,7 +69,7 @@ export default function Team() {
     <section className="py-12 overflow-hidden">
       <div className="container mx-auto px-4">
         {/* Heading */}
-        <div className="mb-12 text-center">
+        <div className="mb-8 text-left">
           <span className="text-orange-500 font-semibold uppercase tracking-[3px]">
             Our Team
           </span>

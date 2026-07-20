@@ -7,12 +7,14 @@ import StatCard from "@/components/Modules/HomePage/StatCard";
 import Team from "@/components/Modules/HomePage/Team";
 import Logo from "@/components/Modules/HomePage/Logo";
 import Destinations from "@/components/Modules/HomePage/Destinations";
+import RecentlyViewed from "./recently-viewed/page";
 
 export default function HomePage() {
   return (
     <div className="mt-20">
       <Banner />
       <BannerText />
+      <RecentlyViewed />
       <Contact />
       <FeedBack />
       <Gallery />

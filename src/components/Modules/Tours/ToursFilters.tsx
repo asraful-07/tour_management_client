@@ -83,7 +83,7 @@ export default function TourFilters() {
     selectedDivision || selectedTourType || selectedGuests || selectedSort;
 
   return (
-    <div className="col-span-3 w-full h-fit border border-muted rounded-lg p-5 space-y-5 sticky top-6">
+    <div className="shadow-2xl col-span-3 w-full h-fit border border-muted rounded-lg p-5 space-y-5 sticky top-6">
       <div className="flex justify-between items-center">
         <h1 className="text-lg font-semibold">Filters</h1>
         {hasActiveFilters && (

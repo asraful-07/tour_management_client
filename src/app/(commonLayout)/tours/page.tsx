@@ -30,6 +30,7 @@ export default function Tours() {
   });
   const tours = data?.data ?? [];
   const totalPage = data?.meta?.totalPage ?? 1;
+  const totalItems = data?.meta?.total ?? 0;
 
   const goToPage = (nextPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -39,8 +40,11 @@ export default function Tours() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-5 py-8 flex justify-center items-center min-h-[400px]">
-        <p className="text-lg">Loading tours...</p>
+      <div className="container mx-auto flex min-h-[400px] items-center justify-center">
+        <div className="relative h-16 w-16">
+          <div className="absolute inset-0 rounded-full border-4 border-orange-200"></div>
+          <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-orange-500 border-r-orange-500"></div>
+        </div>
       </div>
     );
   }
@@ -48,7 +52,7 @@ export default function Tours() {
   if (error) {
     return (
       <div className="container mx-auto px-5 py-8 flex justify-center items-center min-h-[400px]">
-        <p className="text-lg text-red-500">
+        <p className="text-lg text-red-600">
           Error loading tours. Please try again.
         </p>
       </div>
@@ -69,7 +73,7 @@ export default function Tours() {
   }
 
   return (
-    <div className="container mx-auto px-5 py-8 grid grid-cols-12 gap-5">
+    <div className="container mx-auto px-5 py-24 grid grid-cols-12 gap-5">
       <TourFilters />
       <div className="col-span-9 w-full">
         <div className="space-y-6">
@@ -92,10 +96,11 @@ export default function Tours() {
               <Link
                 href={`/tours/${tourSlug}`}
                 key={tourId}
-                className="group block border border-muted rounded-xl shadow-sm overflow-hidden bg-background transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-primary/40"
+                className="group block border border-muted rounded-xl shadow-sm overflow-hidden bg-background transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-primary/40 h-full"
               >
-                <div className="flex flex-col md:flex-row">
-                  <div className="relative w-full md:w-2/5 shrink-0 h-48 md:h-auto overflow-hidden">
+                <div className="flex flex-col md:flex-row h-full">
+                  {/* Fixed image container with consistent height */}
+                  <div className="relative w-full md:w-2/5 shrink-0 h-64 md:h-[300px] overflow-hidden">
                     <img
                       src={firstImage}
                       alt={item.title}
@@ -106,12 +111,13 @@ export default function Tours() {
                     </span>
                   </div>
 
-                  <div className="p-6 flex-1 space-y-2">
-                    <h3 className="text-xl font-semibold transition-colors group-hover:text-primary">
+                  <div className="p-6 flex-1 flex flex-col">
+                    <h3 className="text-xl font-semibold transition-colors group-hover:text-primary line-clamp-1">
                       {item.title}
                     </h3>
-                    <p className="text-muted-foreground line-clamp-2">
-                      {item.description}
+                    <p className="text-muted-foreground flex-1">
+                      {item.description.split(" ").slice(0, 12).join(" ")}
+                      {item.description.split(" ").length > 12 && "..."}
                     </p>
 
                     <div className="flex items-center justify-between pt-1">
@@ -158,7 +164,7 @@ export default function Tours() {
                       )}
                     </div>
 
-                    <div className="pt-3">
+                    <div className="pt-3 mt-auto">
                       <span className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground text-sm font-medium px-4 py-2 transition-transform group-hover:translate-x-0.5">
                         View Details
                       </span>
@@ -170,37 +176,47 @@ export default function Tours() {
           })}
         </div>
 
-        {/* Pagination */}
+        {/* Updated Pagination with Showing X from Y data */}
         {totalPage > 1 && (
-          <div className="flex justify-center items-center gap-2 mt-8">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={page <= 1}
-              onClick={() => goToPage(page - 1)}
-            >
-              Previous
-            </Button>
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8">
+            <div className="text-sm text-muted-foreground">
+              Showing {tours.length > 0 ? (page - 1) * PAGE_LIMIT + 1 : 0} -{" "}
+              {Math.min(page * PAGE_LIMIT, totalItems)} from {totalItems} data
+            </div>
 
-            {Array.from({ length: totalPage }, (_, i) => i + 1).map((p) => (
+            <div className="flex items-center gap-2">
               <Button
-                key={p}
-                variant={p === page ? "default" : "outline"}
+                variant="outline"
                 size="sm"
-                onClick={() => goToPage(p)}
+                disabled={page <= 1}
+                onClick={() => goToPage(page - 1)}
               >
-                {p}
+                Previous
               </Button>
-            ))}
 
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={page >= totalPage}
-              onClick={() => goToPage(page + 1)}
-            >
-              Next
-            </Button>
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPage }, (_, i) => i + 1).map((p) => (
+                  <Button
+                    key={p}
+                    variant={p === page ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => goToPage(p)}
+                    className="min-w-[36px]"
+                  >
+                    {p}
+                  </Button>
+                ))}
+              </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page >= totalPage}
+                onClick={() => goToPage(page + 1)}
+              >
+                Next
+              </Button>
+            </div>
           </div>
         )}
       </div>

@@ -25,7 +25,9 @@ export interface ITourPackage {
 export interface ITourListResponse {
   data: ITourPackage[];
   meta?: {
+    page?: number;
+    limit?: number;
+    total?: number;
     totalPage?: number;
-    [key: string]: unknown;
   };
 }

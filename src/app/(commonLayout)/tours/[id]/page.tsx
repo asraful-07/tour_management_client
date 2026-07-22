@@ -61,7 +61,7 @@ export default function TourDetails() {
   const { data: tourData, isLoading } = useGetSingleTourQuery(slug ?? "", {
     skip: !slug,
   });
-
+  console.log(tourData);
   const { data: divisionData } = useGetDivisionsQuery(
     { _id: tourData?.data?.division, fields: "name" },
     { skip: !tourData?.data?.division },
@@ -233,16 +233,16 @@ export default function TourDetails() {
   const coverImage = images[0] ?? "/placeholder-image.jpg";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 py-20">
       {/* Image Gallery Section - Removed hover scale */}
       <div className="relative">
-        <div className="container mx-auto px-5 pt-6">
+        <div className="container mx-auto px-4 pt-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3 h-[500px] md:h-[550px] rounded-3xl overflow-hidden shadow-2xl">
             {/* Main Image */}
             <div className="md:col-span-2 relative group">
               <Image
                 src={images[currentImageIndex] || coverImage}
-                alt={tourData.title}
+                alt={tourData?.data?.title}
                 fill
                 className="object-cover transition-all duration-300"
                 priority
@@ -288,7 +288,7 @@ export default function TourDetails() {
                 >
                   <Image
                     src={image}
-                    alt={`${tourData.title} ${index + 1}`}
+                    alt={`${tourData?.data?.title} ${index + 1}`}
                     fill
                     className="object-cover transition-all duration-300"
                   />
@@ -318,16 +318,16 @@ export default function TourDetails() {
                 <div className="flex items-center gap-3 mb-2 flex-wrap">
                   <span className="inline-flex items-center gap-1.5 bg-orange-500/10 text-orange-600 px-3 py-1 rounded-full text-sm font-medium">
                     <MapPin className="w-4 h-4" />
-                    {tourData.location}
+                    {tourData?.data?.location}
                   </span>
                   <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
                     <Award className="w-4 h-4" />
                     Top Rated
                   </span>
                 </div>
-                <h1 className="text-4xl md:text-5xl font-bold text-slate-800 leading-tight">
-                  {tourData.title}
-                </h1>
+                {/* <h1 className="text-4xl md:text-5xl font-bold text-slate-800 leading-tight">
+                  {tourData?.data?.title}
+                </h1> */}
               </div>
               <div className="flex items-center gap-4">
                 <button
@@ -414,14 +414,14 @@ export default function TourDetails() {
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 text-2xl font-bold text-slate-700">
                   <Clock className="w-6 h-6 text-orange-500" />
-                  {tourPlan.length}
+                  {tourPlan?.data?.length}
                 </div>
                 <p className="text-sm text-muted-foreground">Days tour</p>
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 text-2xl font-bold text-slate-700">
                   <Calendar className="w-6 h-6 text-orange-500" />
-                  {formatDate(tourData.startDate)}
+                  {formatDate(tourData?.data?.startDate)}
                 </div>
                 <p className="text-sm text-muted-foreground">Start date</p>
               </div>
@@ -430,10 +430,10 @@ export default function TourDetails() {
             {/* Description */}
             <section className="bg-white rounded-2xl p-6 shadow-sm border border-orange-100">
               <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-                <span className="text-orange-500">✨</span> About This Tour
+                {tourData?.data?.title}
               </h2>
               <p className="text-muted-foreground leading-relaxed text-lg">
-                {tourData.description}
+                {tourData?.data?.description}
               </p>
             </section>
 
@@ -448,7 +448,7 @@ export default function TourDetails() {
                     Departure
                   </p>
                   <p className="text-lg font-semibold text-slate-800">
-                    {tourData.departureLocation}
+                    {tourData?.data?.departureLocation}
                   </p>
                 </div>
               </div>
@@ -461,7 +461,7 @@ export default function TourDetails() {
                     Arrival
                   </p>
                   <p className="text-lg font-semibold text-slate-800">
-                    {tourData.arrivalLocation}
+                    {tourData?.data?.arrivalLocation}
                   </p>
                 </div>
               </div>
@@ -570,7 +570,7 @@ export default function TourDetails() {
                   </p>
                   <div className="flex items-end gap-2 mt-1">
                     <p className="text-4xl font-bold text-orange-500">
-                      ৳{Number(tourData.costFrom ?? 0).toLocaleString()}
+                      ৳{Number(tourData?.data?.costFrom ?? 0).toLocaleString()}
                     </p>
                     <p className="text-sm text-muted-foreground mb-1">
                       / person
@@ -582,19 +582,19 @@ export default function TourDetails() {
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Division</span>
                     <span className="font-medium text-slate-800">
-                      {divisionData?.[0]?.name ?? "-"}
+                      {divisionData?.data?.[0]?.name ?? "-"}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Min Age</span>
                     <span className="font-medium text-slate-800">
-                      {tourData.minAge}+ years
+                      {tourData?.data?.minAge}+ years
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Max Guests</span>
                     <span className="font-medium text-slate-800">
-                      {tourData.maxGuest}
+                      {tourData?.data?.maxGuest}
                     </span>
                   </div>
                 </div>
@@ -630,7 +630,9 @@ export default function TourDetails() {
                   </div>
                   <p className="text-xs text-muted-foreground text-center">
                     {guestCount} guest{guestCount > 1 ? "s" : ""} • Total: ৳
-                    {Number(tourData.costFrom * guestCount).toLocaleString()}
+                    {Number(
+                      tourData?.data?.costFrom ?? 0 * guestCount,
+                    ).toLocaleString()}
                   </p>
                 </div>
 

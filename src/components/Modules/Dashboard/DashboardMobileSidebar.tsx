@@ -26,7 +26,7 @@ const DashboardMobileSidebar = ({
       {/* Logo / Brand */}
       <div className="flex h-16 items-center border-b px-6">
         <Link href={dashboardHome}>
-          <span className="text-xl font-bold text-primary">Food Hunt</span>
+          <span className="text-xl font-bold text-primary">TO GO</span>
         </Link>
       </div>
 

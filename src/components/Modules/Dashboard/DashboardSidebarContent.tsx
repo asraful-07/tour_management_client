@@ -38,7 +38,7 @@ const DashboardSidebarContent = ({
         {!collapsed && (
           <Link href={dashboardHome}>
             <span className="text-xl font-bold text-primary whitespace-nowrap">
-              Food Hunt
+              TO GO
             </span>
           </Link>
         )}

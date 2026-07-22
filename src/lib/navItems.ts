@@ -75,7 +75,7 @@ const getAdminNavItems: NavSection[] = [
     ],
   },
   {
-    title: "Add Division Management",
+    title: "Division Management",
     items: [
       {
         title: "Division Management",
@@ -155,16 +155,16 @@ const getGuideNavItems: NavSection[] = [
 ];
 
 const getUserNavItems: NavSection[] = [
-  {
-    title: "User Panel",
-    items: [
-      {
-        title: "User Dashboard",
-        href: "/dashboard/stats",
-        icon: "LayoutDashboard",
-      },
-    ],
-  },
+  // {
+  //   title: "User Panel",
+  //   items: [
+  //     {
+  //       title: "User Dashboard",
+  //       href: "/dashboard/stats",
+  //       icon: "LayoutDashboard",
+  //     },
+  //   ],
+  // },
   {
     title: "My Bookings",
     items: [
@@ -192,6 +192,16 @@ const getUserNavItems: NavSection[] = [
         title: "My Reviews",
         href: "/dashboard/my-reviews",
         icon: "Star",
+      },
+    ],
+  },
+  {
+    title: "Settings",
+    items: [
+      {
+        title: "My Settings",
+        href: "/dashboard/settings",
+        icon: "Settings",
       },
     ],
   },

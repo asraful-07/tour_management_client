@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useGetDivisionsQuery } from "@/redux/features/division/division.api";
 import { useGetSingleTourQuery } from "@/redux/features/tour/tour.api";
+import { useCreateBookingMutation } from "@/redux/features/booking/booking.api";
 import { format } from "date-fns";
 import {
   Calendar,
@@ -57,11 +58,14 @@ export default function TourDetails() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [isBooking, setIsBooking] = useState(false);
 
   const { data: tourData, isLoading } = useGetSingleTourQuery(slug ?? "", {
     skip: !slug,
   });
-  console.log(tourData);
+
+  const [createBooking] = useCreateBookingMutation();
+
   const { data: divisionData } = useGetDivisionsQuery(
     { _id: tourData?.data?.division, fields: "name" },
     { skip: !tourData?.data?.division },
@@ -83,7 +87,7 @@ export default function TourDetails() {
     (item: any): item is string => typeof item === "string",
   );
 
-  const maxGuest = tourData?.maxGuest ?? 1;
+  const maxGuest = tourData?.data?.maxGuest ?? 1;
   const rating = 4.8;
   const reviewCount = 127;
 
@@ -163,13 +167,52 @@ export default function TourDetails() {
     setGuestCount((prev) => Math.max(prev - 1, 1));
   };
 
-  const handleBookNow = () => {
-    router.push(`/bookings?tourId=${tourData?._id}&guestCount=${guestCount}`);
+  const handleBookNow = async () => {
+    if (!tourData?.data?._id) {
+      toast.error("Tour information is missing");
+      return;
+    }
+
+    setIsBooking(true);
+    const toastId = toast.loading("Creating your booking...");
+
+    const bookingData = {
+      tour: tourData.data._id,
+      guestCount: guestCount,
+    };
+
+    try {
+      const result = await createBooking(bookingData).unwrap();
+
+      if (result?.success && result?.data?._id) {
+        toast.success("Booking created successfully!", {
+          id: toastId,
+        });
+
+        // Navigate to booking details page
+        router.push(`/bookings/${result.data._id}`);
+      } else {
+        toast.error("Booking failed. Please try again.", {
+          id: toastId,
+        });
+      }
+    } catch (error: any) {
+      console.error("Booking error:", error);
+      toast.error(
+        error?.data?.message ||
+          "Something went wrong while creating your booking.",
+        {
+          id: toastId,
+        },
+      );
+    } finally {
+      setIsBooking(false);
+    }
   };
 
   const handleShare = (platform: string) => {
     const url = window.location.href;
-    const text = `Check out ${tourData?.title}!`;
+    const text = `Check out ${tourData?.data?.title}!`;
 
     const shareUrls: Record<string, string> = {
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
@@ -234,7 +277,7 @@ export default function TourDetails() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 py-20">
-      {/* Image Gallery Section - Removed hover scale */}
+      {/* Image Gallery Section */}
       <div className="relative">
         <div className="container mx-auto px-4 pt-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3 h-[500px] md:h-[550px] rounded-3xl overflow-hidden shadow-2xl">
@@ -278,7 +321,7 @@ export default function TourDetails() {
               )}
             </div>
 
-            {/* Thumbnail Grid - Removed hover scale */}
+            {/* Thumbnail Grid */}
             <div className="hidden md:grid md:grid-cols-2 gap-3 md:col-span-2">
               {images.slice(0, 4).map((image: string, index: number) => (
                 <div
@@ -394,8 +437,8 @@ export default function TourDetails() {
               </div>
             </div>
 
-            {/* Quick Stats with Orange theme */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-white rounded-2xl shadow-sm border border-orange-100">
+            {/* Quick Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 p-6 bg-white rounded-2xl shadow-sm border border-orange-100">
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 text-2xl font-bold text-orange-500">
                   ⭐ {rating}
@@ -414,7 +457,7 @@ export default function TourDetails() {
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 text-2xl font-bold text-slate-700">
                   <Clock className="w-6 h-6 text-orange-500" />
-                  {tourPlan?.data?.length}
+                  {tourPlan.length}
                 </div>
                 <p className="text-sm text-muted-foreground">Days tour</p>
               </div>
@@ -425,11 +468,19 @@ export default function TourDetails() {
                 </div>
                 <p className="text-sm text-muted-foreground">Start date</p>
               </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-2 text-2xl font-bold text-slate-700">
+                  <Calendar className="w-6 h-6 text-orange-500" />
+                  {formatDate(tourData?.data?.endDate)}
+                </div>
+                <p className="text-sm text-muted-foreground">End date</p>
+              </div>
             </div>
 
             {/* Description */}
             <section className="bg-white rounded-2xl p-6 shadow-sm border border-orange-100">
               <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+                <Sparkles className="w-6 h-6 text-orange-500" />
                 {tourData?.data?.title}
               </h2>
               <p className="text-muted-foreground leading-relaxed text-lg">
@@ -437,7 +488,7 @@ export default function TourDetails() {
               </p>
             </section>
 
-            {/* Route Info with Orange theme */}
+            {/* Route Info */}
             <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-orange-100 flex items-start gap-4 transition-all hover:shadow-md hover:border-orange-300">
                 <div className="p-3 bg-orange-500/10 rounded-xl">
@@ -467,7 +518,7 @@ export default function TourDetails() {
               </div>
             </section>
 
-            {/* Included / Excluded with better icons */}
+            {/* Included / Excluded */}
             <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-green-100">
                 <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 text-green-600">
@@ -509,7 +560,7 @@ export default function TourDetails() {
               </div>
             </section>
 
-            {/* Amenities with icons and Orange theme */}
+            {/* Amenities */}
             {amenities.length > 0 && (
               <section className="bg-white rounded-2xl p-6 shadow-sm border border-orange-100">
                 <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
@@ -530,7 +581,7 @@ export default function TourDetails() {
               </section>
             )}
 
-            {/* Tour Plan with Orange theme */}
+            {/* Tour Plan */}
             {tourPlan.length > 0 && (
               <section className="bg-white rounded-2xl p-6 shadow-sm border border-orange-100">
                 <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
@@ -560,7 +611,7 @@ export default function TourDetails() {
             )}
           </div>
 
-          {/* Right: Booking Card with Orange theme */}
+          {/* Right: Booking Card */}
           <div className="lg:col-span-1">
             <div className="sticky top-24">
               <div className="bg-white rounded-3xl p-8 shadow-2xl border border-orange-100 space-y-6">
@@ -599,7 +650,7 @@ export default function TourDetails() {
                   </div>
                 </div>
 
-                {/* Guest Count Selector - Improved Design */}
+                {/* Guest Count Selector */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between bg-orange-50 p-3 rounded-xl">
                     <span className="text-sm font-medium text-slate-700 flex items-center gap-2">
@@ -630,8 +681,8 @@ export default function TourDetails() {
                   </div>
                   <p className="text-xs text-muted-foreground text-center">
                     {guestCount} guest{guestCount > 1 ? "s" : ""} • Total: ৳
-                    {Number(
-                      tourData?.data?.costFrom ?? 0 * guestCount,
+                    {(
+                      Number(tourData?.data?.costFrom ?? 0) * guestCount
                     ).toLocaleString()}
                   </p>
                 </div>
@@ -639,9 +690,19 @@ export default function TourDetails() {
                 <Button
                   className="w-full h-14 text-base font-semibold rounded-xl bg-orange-500 hover:bg-orange-600 shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 transition-all text-white"
                   onClick={handleBookNow}
+                  disabled={isBooking}
                 >
-                  <Calendar className="w-5 h-5 mr-2" />
-                  Book Now
+                  {isBooking ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                      Booking...
+                    </>
+                  ) : (
+                    <>
+                      <Calendar className="w-5 h-5 mr-2" />
+                      Book Now
+                    </>
+                  )}
                 </Button>
 
                 <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">

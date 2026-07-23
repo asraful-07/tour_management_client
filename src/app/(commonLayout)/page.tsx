@@ -8,6 +8,7 @@ import Team from "@/components/Modules/HomePage/Team";
 import Logo from "@/components/Modules/HomePage/Logo";
 import Destinations from "@/components/Modules/HomePage/Destinations";
 import RecentlyViewed from "./recently-viewed/page";
+import Blog from "@/components/Modules/HomePage/Blog";
 
 export default function HomePage() {
   return (
@@ -21,6 +22,7 @@ export default function HomePage() {
       <StatCard />
       <Team />
       <Destinations />
+      <Blog />
       <Logo />
     </div>
   );

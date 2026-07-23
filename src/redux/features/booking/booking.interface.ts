@@ -23,8 +23,13 @@ export interface IBooking {
 }
 
 export interface BookingListResponse {
-  success: boolean;
   data: IBooking[];
+  meta?: {
+    total: number;
+    page?: number;
+    limit?: number;
+    totalPage?: number;
+  };
 }
 
 export interface SingleBookingResponse {

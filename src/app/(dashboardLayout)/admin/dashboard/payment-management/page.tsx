@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function PaymentMange() {
-  return <div>PaymentMange</div>;
+export default function PaymentManagement() {
+  return <div>PaymentManagement</div>;
 }
